@@ -1,4 +1,4 @@
-#ScoreNexus ⚽
+# ScoreNexus: Football ⚽
 
 ScoreNexus is a desktop application built with Java Swing for tracking live football match scores. It's designed for local games, college tournaments, or any situation where a digital scorecard is needed. The application features a dynamic UI for managing game events, saves all data to a local database using JDBC, and allows for exporting game statistics to CSV files.
 
@@ -47,7 +47,7 @@ Make sure you have the Java Development Kit (JDK) version 8 or higher installed 
 
 ##
 ## How to Compile and Run
-    Open a terminal or Git Bash in the project's root directory (`ScoreNexus-Java-App/`) and run the following commands.
+   Open a terminal or Git Bash in the project's root directory (`ScoreNexus-Java-App/`) and run the following commands.
 
 1. Compile the source code:
     ```
