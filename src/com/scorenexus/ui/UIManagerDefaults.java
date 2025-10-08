@@ -14,16 +14,13 @@ public class UIManagerDefaults {
                 }
             }
         } catch (Exception e) {
-            // Fallback
             try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
-        
-        // MODIFICATION: Removed the ineffective MenuItem overrides.
-        // The new, more direct styling is now handled in PlayerCircle.java
+
         Color darkGray = new Color(60, 63, 65);
         UIManager.put("PopupMenu.background", new ColorUIResource(darkGray));
         UIManager.put("PopupMenu.border", BorderFactory.createLineBorder(Color.GRAY));

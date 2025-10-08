@@ -28,14 +28,11 @@ public class GamePanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(50, 50, 50));
         setBorder(new EmptyBorder(10, 10, 10, 10));
-        
-        // Top Panel is unchanged...
+
         JPanel topPanel = new JPanel(new BorderLayout()); topPanel.setOpaque(false); JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0)); infoPanel.setOpaque(false); timerLabel = new JLabel("00:00"); timerLabel.setFont(new Font("Segoe UI", Font.BOLD, 48)); timerLabel.setForeground(Color.WHITE); scoreLabel = new JLabel("Team A 0 - 0 Team B"); scoreLabel.setFont(new Font("Segoe UI", Font.BOLD, 24)); scoreLabel.setForeground(Color.WHITE); halfTimeLabel = new JLabel(""); halfTimeLabel.setFont(new Font("Segoe UI", Font.BOLD, 20)); halfTimeLabel.setForeground(Color.ORANGE); infoPanel.add(scoreLabel); infoPanel.add(timerLabel); infoPanel.add(halfTimeLabel); topPanel.add(infoPanel, BorderLayout.CENTER); JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER)); controlPanel.setOpaque(false); startButton = new JButton("Start Game"); stopButton = new JButton("Pause"); resumeButton = new JButton("Resume"); endButton = new JButton("End Game"); setupButton(startButton); setupButton(stopButton); setupButton(resumeButton); setupButton(endButton); controlPanel.add(startButton); controlPanel.add(stopButton); controlPanel.add(resumeButton); controlPanel.add(endButton); topPanel.add(controlPanel, BorderLayout.SOUTH); add(topPanel, BorderLayout.NORTH);
 
-        // Side Panels are unchanged...
         teamASubsList = new JList<>(); teamBSubsList = new JList<>(); JScrollPane subsAScroll = new JScrollPane(teamASubsList); JScrollPane subsBScroll = new JScrollPane(teamBSubsList); subsAScroll.getViewport().setBackground(new Color(70, 70, 70)); subsBScroll.getViewport().setBackground(new Color(70, 70, 70)); setupSubsPanel(teamASubsList); setupSubsPanel(teamBSubsList); add(createTitledPanel(subsAScroll, "Team A Subs"), BorderLayout.WEST); add(createTitledPanel(subsBScroll, "Team B Subs"), BorderLayout.EAST);
-        
-        // MODIFICATION: Reverting pitch to use null layout for free movement.
+
         pitchPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -49,10 +46,9 @@ public class GamePanel extends JPanel {
                 int w = getWidth(); int h = getHeight(); g2d.drawRect(10, 10, w - 20, h - 20); g2d.drawLine(w / 2, 10, w / 2, h - 10); int ccd = Math.min(w, h) / 5; g2d.drawOval(w / 2 - ccd / 2, h / 2 - ccd / 2, ccd, ccd); g2d.drawRect(10, h / 2 - h / 4, w / 6, h / 2); g2d.drawRect(w - 10 - w / 6, h / 2 - h / 4, w / 6, h / 2); g2d.drawRect(10, h/2 - h/8, w/12, h/4); g2d.drawRect(w - 10 - w/12, h/2 - h/8, w/12, h/4);
             }
         };
-        pitchPanel.setLayout(null); // This is the crucial change.
+        pitchPanel.setLayout(null); 
         add(pitchPanel, BorderLayout.CENTER);
 
-        // Timer and Button actions are unchanged...
         gameTimer = new Timer(1000, e -> updateTimer()); startButton.addActionListener(e -> startGame()); stopButton.addActionListener(e -> pauseGame()); resumeButton.addActionListener(e -> resumeGame()); endButton.addActionListener(e -> { if (JOptionPane.showConfirmDialog(this, "Are you sure you want to end the game?", "Confirm", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) { gameTimer.stop(); app.endGame(); } });
     }
 
@@ -65,8 +61,7 @@ public class GamePanel extends JPanel {
         updateScoreLabel();
         updateTimerLabel();
         halfTimeLabel.setText("");
-        // Position players needs to be done after the panel is visible to get correct width/height.
-        // We use invokeLater to schedule it for after the current event dispatching is done.
+
         SwingUtilities.invokeLater(() -> {
             positionPlayers(game.getTeamA(), true);
             positionPlayers(game.getTeamB(), false);
@@ -80,11 +75,10 @@ public class GamePanel extends JPanel {
         endButton.setEnabled(true);
         JOptionPane.showMessageDialog(this, "Game created! Drag players into position, then press 'Start Game'.", "Setup Formations", JOptionPane.INFORMATION_MESSAGE);
     }
-    
-    // MODIFICATION: Reverted to absolute positioning with setBounds.
+
     private void positionPlayers(Team team, boolean isTeamA) {
-        if (pitchPanel.getWidth() == 0) return; // Don't run if panel isn't sized yet.
-        
+        if (pitchPanel.getWidth() == 0) return; 
+
         int xOffset = isTeamA ? 50 : pitchPanel.getWidth() - 100;
         int numPlayers = (int) team.getPlayers().stream().filter(p -> !p.isSubstitute()).count();
         int ySpacing = (pitchPanel.getHeight() - 40) / (Math.max(1, numPlayers));
@@ -107,20 +101,17 @@ public class GamePanel extends JPanel {
         stopButton.setEnabled(true);
         resumeButton.setEnabled(false);
 
-        // MODIFICATION: Disable dragging on each player circle.
         for (Component comp : pitchPanel.getComponents()) {
             if (comp instanceof PlayerCircle) {
                 ((PlayerCircle) comp).setDraggable(false);
             }
         }
     }
-    
-    // The rest of the file (action methods, timer, helpers) is almost identical.
-    // The only change is that methods like recordRedCard now search components directly.
+
     public void recordGoal(Player player, Team team) { player.addGoal(); team.incrementScore(); updateScoreLabel(); logEvent("Goal scored by " + player.getName(), team.getName()); findAndRepaintPlayerCircle(player); }
     public void recordAssist(Player player, Team team) { player.addAssist(); logEvent("Assist by " + player.getName(), team.getName()); findAndRepaintPlayerCircle(player); }
     public void recordYellowCard(Player player, Team team) { player.addYellowCard(); logEvent("Yellow card for " + player.getName(), team.getName()); findAndRepaintPlayerCircle(player); if (player.getYellowCards() >= 2) { recordRedCard(player, team, true); } }
-    
+
     public void recordRedCard(Player player, Team team, boolean fromTwoYellows) {
         player.setHasRedCard(true);
         String reason = fromTwoYellows ? " (2nd yellow)" : "";
@@ -138,7 +129,7 @@ public class GamePanel extends JPanel {
             pitchPanel.repaint();
         }
     }
-    
+
     public void performSubstitution(Player playerOut, Team team) {
         java.util.List<Player> subs = team.getPlayers().stream().filter(Player::isSubstitute).collect(Collectors.toList());
         if (subs.isEmpty()) { JOptionPane.showMessageDialog(this, "No substitutes available.", "Substitution", JOptionPane.WARNING_MESSAGE); return; }
@@ -172,7 +163,7 @@ public class GamePanel extends JPanel {
             }
         }
     }
-    
+
     private void findAndRepaintPlayerCircle(Player player) { for (Component comp : pitchPanel.getComponents()) { if (comp instanceof PlayerCircle && ((PlayerCircle) comp).getPlayer() == player) { comp.repaint(); return; } } }
     private void pauseGame() { isPaused = true; gameTimer.stop(); stopButton.setEnabled(false); resumeButton.setEnabled(true); }
     private void resumeGame() { isPaused = false; gameTimer.start(); if(isHalftime) halfTimeLabel.setText(""); stopButton.setEnabled(true); resumeButton.setEnabled(false); }

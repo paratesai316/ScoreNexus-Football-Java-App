@@ -28,7 +28,6 @@ public class SummaryPanel extends JPanel {
         finalScoreLabel.setForeground(Color.WHITE);
         add(finalScoreLabel, BorderLayout.NORTH);
 
-        // Player Stats Table
         String[] columnNames = {"Team", "Name", "#", "Goals", "Assists", "YC", "RC"};
         tableModel = new DefaultTableModel(columnNames, 0);
         statsTable = new JTable(tableModel);
@@ -38,7 +37,6 @@ public class SummaryPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(statsTable);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Bottom panel for actions
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         bottomPanel.setOpaque(false);
         JButton exportButton = new JButton("Export All to CSV");
@@ -46,7 +44,7 @@ public class SummaryPanel extends JPanel {
 
         setupButton(exportButton);
         setupButton(newGameButton);
-        
+
         exportButton.addActionListener(e -> exportData());
         newGameButton.addActionListener(e -> app.createNewGame());
 
@@ -54,7 +52,7 @@ public class SummaryPanel extends JPanel {
         bottomPanel.add(newGameButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
-    
+
     private void setupButton(JButton button) {
         button.setFont(new Font("Segoe UI", Font.BOLD, 16));
         button.setForeground(Color.WHITE);
@@ -67,11 +65,9 @@ public class SummaryPanel extends JPanel {
         finalScoreLabel.setText(String.format("Final Score: %s %d - %d %s",
             game.getTeamA().getName(), game.getTeamA().getScore(),
             game.getTeamB().getScore(), game.getTeamB().getName()));
-        
-        // Clear previous data
+
         tableModel.setRowCount(0);
-        
-        // Populate table
+
         addTeamToTable(game.getTeamA());
         addTeamToTable(game.getTeamB());
     }
@@ -90,7 +86,7 @@ public class SummaryPanel extends JPanel {
             tableModel.addRow(row);
         }
     }
-    
+
     private void exportData() {
         if (game == null) return;
         try {

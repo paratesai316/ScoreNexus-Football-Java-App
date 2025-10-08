@@ -10,7 +10,6 @@ public class Player {
     private boolean hasRedCard = false;
     private long minutesPlayed = 0;
     
-    // MODIFICATION: Add flag to track substitution status for icons
     private boolean wasSubstitutedOut = false;
     private final boolean wasOriginallySubstitute;
 
@@ -19,10 +18,9 @@ public class Player {
         this.name = name;
         this.number = number;
         this.isSubstitute = isSubstitute;
-        this.wasOriginallySubstitute = isSubstitute; // Store initial state
+        this.wasOriginallySubstitute = isSubstitute;
     }
 
-    // --- Getters and Setters ---
     public String getName() { return name; }
     public int getNumber() { return number; }
     public boolean isSubstitute() { return isSubstitute; }
@@ -38,11 +36,9 @@ public class Player {
     public long getMinutesPlayed() { return minutesPlayed; }
     public void setMinutesPlayed(long minutesPlayed) { this.minutesPlayed = minutesPlayed; }
     
-    // MODIFICATION: New getters and setters for icons
     public boolean wasSubstitutedOut() { return wasSubstitutedOut; }
     public void setWasSubstitutedOut(boolean wasSubstitutedOut) { this.wasSubstitutedOut = wasSubstitutedOut; }
     public boolean wasSubstitutedIn() {
-        // A player was subbed IN if they started as a sub but are not one anymore
         return wasOriginallySubstitute && !isSubstitute;
     }
 }

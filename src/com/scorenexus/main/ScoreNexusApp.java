@@ -43,7 +43,6 @@ public class ScoreNexusApp {
         frame.add(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        // MODIFICATION: Make the window start maximized.
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
         frame.pack();

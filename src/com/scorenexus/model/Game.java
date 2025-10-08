@@ -21,7 +21,6 @@ public class Game {
         this.timeline.add(event);
     }
 
-    // Getters and Setters
     public long getGameId() { return gameId; }
     public void setGameId(long gameId) { this.gameId = gameId; }
     public Team getTeamA() { return teamA; }

@@ -18,7 +18,7 @@ public class CSVExporter {
             writer.printf("%s,%d\n", game.getTeamB().getName(), game.getTeamB().getScore());
         }
     }
-    
+
     public static void exportGameTimeline(Game game) throws IOException {
         String fileName = "game_" + game.getGameId() + "_timeline.csv";
         try (PrintWriter writer = new PrintWriter(new FileWriter(fileName))) {
@@ -40,8 +40,7 @@ public class CSVExporter {
 
     private static void writePlayerStatsForTeam(PrintWriter writer, Team team, int duration) {
         for (Player p : team.getPlayers()) {
-            // NOTE: A more complex system would track exact minutes played during substitutions.
-            // For simplicity, we assume starters played the full game if not subbed.
+
             int minutesPlayed = p.isSubstitute() ? 0 : duration; 
             writer.printf("\"%s\",%d,\"%s\",%d,%d,%d\n",
                     team.getName(),

@@ -79,7 +79,7 @@ public class DatabaseManager {
         }
         return gameId;
     }
-    
+
     public void logEvent(long gameId, String timestamp, String action, String teamName) {
         String sql = "INSERT INTO timeline(game_id, timestamp, action, team_name) VALUES(?,?,?,?)";
         try (Connection conn = this.connect();
@@ -95,7 +95,7 @@ public class DatabaseManager {
     }
 
     public void finalizeGame(Game game) {
-        // Update final score
+
         String sqlGame = "UPDATE games SET team_a_score = ?, team_b_score = ? WHERE id = ?";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sqlGame)) {
@@ -106,12 +106,11 @@ public class DatabaseManager {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        
-        // Save player stats
+
         savePlayerStatsForTeam(game, game.getTeamA());
         savePlayerStatsForTeam(game, game.getTeamB());
     }
-    
+
     private void savePlayerStatsForTeam(Game game, Team team) {
         String sql = "INSERT INTO player_stats(game_id, team_name, player_number, player_name, goals, assists) VALUES(?,?,?,?,?,?)";
         try (Connection conn = this.connect();

@@ -15,7 +15,6 @@ public class PlayerCircle extends JComponent {
     private final GamePanel gamePanel;
     private final boolean isTeamA;
 
-    // MODIFICATION: Re-implementing free-form drag logic
     private Point dragStartPoint;
     private boolean isDraggable = true;
 
@@ -45,7 +44,6 @@ public class PlayerCircle extends JComponent {
         this.gamePanel = gamePanel;
         this.isTeamA = isTeamA;
 
-        // MODIFICATION: Reverting to the original mouse listeners for free dragging.
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -98,16 +96,14 @@ public class PlayerCircle extends JComponent {
         FontMetrics fm = g2d.getFontMetrics();
         g2d.drawString(number, (w - fm.stringWidth(number)) / 2, (h - fm.getHeight()) / 2 + fm.getAscent());
 
-        // MODIFICATION: Icon size is now smaller.
         int iconSize = (int) (circleSize * 0.4);
-        
-        // MODIFICATION: Icon positions are updated as per your request.
-        if (player.getGoals() > 0) drawIcon(g2d, goalImg, w - iconSize/2, h - iconSize/2, iconSize);          // Bottom-right
-        if (player.getAssists() > 0) drawIcon(g2d, assistImg, iconSize/2, h - iconSize/2, iconSize);       // Bottom-left
-        if (player.hasRedCard()) drawIcon(g2d, redCardImg, iconSize/2, iconSize/2, iconSize);              // Top-left (replaces yellow)
-        else if (player.getYellowCards() > 0) drawIcon(g2d, yellowCardImg, iconSize/2, iconSize/2, iconSize); // Top-left
-        if (player.wasSubstitutedOut()) drawIcon(g2d, subOutImg, w - iconSize/2, iconSize/2, iconSize);      // Top-right
-        if (player.wasSubstitutedIn()) drawIcon(g2d, subInImg, w - iconSize/2, iconSize/2, iconSize);       // Top-right
+
+        if (player.getGoals() > 0) drawIcon(g2d, goalImg, w - iconSize/2, h - iconSize/2, iconSize);          
+        if (player.getAssists() > 0) drawIcon(g2d, assistImg, iconSize/2, h - iconSize/2, iconSize);       
+        if (player.hasRedCard()) drawIcon(g2d, redCardImg, iconSize/2, iconSize/2, iconSize);              
+        else if (player.getYellowCards() > 0) drawIcon(g2d, yellowCardImg, iconSize/2, iconSize/2, iconSize); 
+        if (player.wasSubstitutedOut()) drawIcon(g2d, subOutImg, w - iconSize/2, iconSize/2, iconSize);      
+        if (player.wasSubstitutedIn()) drawIcon(g2d, subInImg, w - iconSize/2, iconSize/2, iconSize);       
     }
 
     private void drawIcon(Graphics2D g2d, Image img, int centerX, int centerY, int size) {
@@ -115,12 +111,11 @@ public class PlayerCircle extends JComponent {
             g2d.drawImage(img, centerX - size / 2, centerY - size / 2, size, size, null);
         }
     }
-    
+
     public Player getPlayer() {
         return player;
     }
-    
-    // The menu creation logic is unchanged from the last fix.
+
     private void createPopupMenu() {
         JPopupMenu popupMenu = new JPopupMenu();
         Team playerTeam = isTeamA ? gamePanel.getGame().getTeamA() : gamePanel.getGame().getTeamB();
